@@ -15,4 +15,9 @@ public class HomeController {
     public String login() {
         return "login"; // /WEB-INF/views/login.jsp를 찾습니다.
     }
+
+    @GetMapping("/mypage")
+    public String mypage() {
+        return "mypage/mypage";
+    }
 }
