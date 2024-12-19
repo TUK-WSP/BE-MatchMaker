@@ -1,31 +1,58 @@
 package org.wsp.matchmaker.domain.recruitment.controller;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-// 들어오는 값: { "application_id": applicationId }
-// 나가는 값:
-// {
-//   "recruitmentId": "...",
-//   "recruitmentApplication": {
-//     "application_id": "...",
-//     "application_status": "...",
-//     "user_id": "...",
-//     "application": "..."
-//   }
-// }
+@WebServlet("/recruitment/application")
+public class RecruitmentApplicationController extends HttpServlet {
 
-@RestController
-@RequiredArgsConstructor
-public class RecruitmentApplicationController {
+    // JSON 파싱 메서드
+    private static String getParamFromJson(String json, String key) {
+        // 파싱: "application_id":"..." 형태를 가정
+        String search = "\"" + key + "\":\"";
+        int start = json.indexOf(search);
+        if (start == -1) return null;
+        start += search.length();
+        int end = json.indexOf("\"", start);
+        if (end == -1) return null;
+        return json.substring(start, end);
+    }
 
-    private final RecruitmentApplicationService recruitmentApplicationService;
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 요청 바디를 읽어 JSON 파싱
+        StringBuilder sb = new StringBuilder();
+        try(BufferedReader br = request.getReader()) {
+            String line;
+            while((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+        }
+        String requestBody = sb.toString();
+        String applicationId = getParamFromJson(requestBody, "application_id");
 
-    @PostMapping("/recruitment/application")
-    public RecruitmentApplicationResponse getApplication(@RequestBody RecruitmentApplicationRequest request) {
-        // application_id로 신청 정보 조회
-        return recruitmentApplicationService.findByApplicationId(request.getApplication_id());
+        // 여기서는 mock 데이터 반환
+        String recruitmentId = "r-001";
+        String application_id = (applicationId != null) ? applicationId : "unknown";
+        String application_status = "APPROVED";
+        String user_id = "user123";
+        String application = "간단한 자기소개";
+
+        // JSON 응답 생성
+        response.setContentType("application/json; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print("{");
+        out.print("\"recruitmentId\":\""+recruitmentId+"\",");
+        out.print("\"recruitmentApplication\":{");
+        out.print("\"application_id\":\""+application_id+"\",");
+        out.print("\"application_status\":\""+application_status+"\",");
+        out.print("\"user_id\":\""+user_id+"\",");
+        out.print("\"application\":\""+application+"\"");
+        out.print("}}");
+        out.flush();
     }
 }
