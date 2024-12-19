@@ -1,54 +1,77 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ include file="../header.jsp" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ page import="java.util.UUID" %>
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>모집글 생성</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Recruitment 생성</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<div class="container mt-5">
-    <h2 class="text-center mb-4">모집글 생성</h2>
 
-    <form action="RecruitmentController" method="POST">
-        <input type="hidden" name="groupId" value="${groupId}"> <!-- 그룹 ID hidden 필드 -->
+<h1>모집글 생성</h1>
+<form id="recruitmentForm">
+    <label for="groupId">Group ID:</label><br>
+    <input type="text" id="groupId" name="groupId" placeholder="그룹 ID(UUID)" value=""><br><br>
 
-        <div class="mb-3">
-            <label for="recruitmentTitle" class="form-label">모집 제목</label>
-            <input type="text" class="form-control" id="recruitmentTitle" name="recruitment_title" required>
-        </div>
+    <label for="recruitment_title">제목:</label><br>
+    <input type="text" id="recruitment_title" name="recruitment_title" placeholder="모집글 제목"><br><br>
 
-        <div class="mb-3">
-            <label for="description" class="form-label">모집 설명</label>
-            <textarea class="form-control" id="description" name="recruitment_description" rows="4" required></textarea>
-        </div>
+    <label for="recruitment_description">설명:</label><br>
+    <textarea id="recruitment_description" name="recruitment_description" placeholder="모집글 설명"></textarea><br><br>
 
-        <div class="mb-3">
-            <label for="deadline" class="form-label">모집 마감일</label>
-            <input type="date" class="form-control" id="deadline" name="recruitment_deadline" required>
-        </div>
+    <label for="recruitment_deadline">마감일(yyyy-MM-dd):</label><br>
+    <input type="text" id="recruitment_deadline" name="recruitment_deadline" placeholder="예: 2024-12-31"><br><br>
 
-        <div class="mb-3">
-            <label for="number" class="form-label">모집 인원</label>
-            <input type="number" class="form-control" id="number" name="recruitmentNumber" min="1" required>
-        </div>
+    <label for="recruitmentNumber">모집인원:</label><br>
+    <input type="number" id="recruitmentNumber" name="recruitmentNumber" placeholder="모집 인원 수"><br><br>
 
-        <div class="mb-3">
-            <label for="status" class="form-label">모집 상태</label>
-            <select class="form-select" id="status" name="recruitment_status" required>
-                <option value="OPEN">열림</option>
-                <option value="CLOSED">마감</option>
-            </select>
-        </div>
+    <label for="recruitment_status">상태:</label><br>
+    <input type="text" id="recruitment_status" name="recruitment_status" placeholder="예: ACTIVE or INACTIVE"><br><br>
 
-        <button type="submit" class="btn btn-primary">모집글 생성</button>
-    </form>
-</div>
+    <button type="button" id="submitBtn">등록</button>
+</form>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<hr>
+
+<div id="result"></div>
+
+<script>
+    $(document).ready(function() {
+        $("#submitBtn").click(function() {
+            var requestData = {
+                "groupId": $("#groupId").val(),
+                "recruitmentTitle": $("#recruitment_title").val(),
+                "recruitmentDescription": $("#recruitment_description").val(),
+                "recruitmentDeadline": $("#recruitment_deadline").val(),
+                "recruitmentNumber": parseInt($("#recruitmentNumber").val()),
+                "recruitmentStatus": $("#recruitment_status").val()
+            };
+
+            $.ajax({
+                url: "${pageContext.request.contextPath}/recruitment",
+                type: "POST",
+                contentType: "application/json; charset=UTF-8",
+                data: JSON.stringify(requestData),
+                dataType: "json",
+                success: function(response) {
+                    // response: { "recruitmentId", "groupId", "title", "description", "deadline", "recruitmentNumber" }
+                    $("#result").html(
+                        "<h3>등록 성공!</h3>" +
+                        "<p>Recruitment ID: " + response.recruitmentId + "</p>" +
+                        "<p>Group ID: " + response.groupId + "</p>" +
+                        "<p>제목: " + response.title + "</p>" +
+                        "<p>설명: " + response.description + "</p>" +
+                        "<p>마감일: " + response.deadline + "</p>" +
+                        "<p>모집인원: " + response.recruitmentNumber + "</p>"
+                    );
+                },
+                error: function(xhr, status, error) {
+                    $("#result").html("<h3>등록 실패</h3><p>" + xhr.responseText + "</p>");
+                }
+            });
+        });
+    });
+</script>
+
 </body>
 </html>
