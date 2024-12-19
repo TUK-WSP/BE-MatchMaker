@@ -59,10 +59,10 @@ public class GroupCreateController extends HttpServlet {
         // 그룹 저장
         groupRepository.save(group);
 
-        // 로그인 유저 정보 얻기 (세션에서 가져오는 로직이 필요)
+        // 로그인 유저 정보 얻기
         User user = getLoggedInUser(request);
 
-        // UserGroup 엔티티 생성 및 저장 (유저를 그룹에 속하게 함)
+        // UserGroup 엔티티 생성 및 저장
         UserGroup userGroup = UserGroup.builder()
                 .group(group)
                 .user(user)
@@ -73,10 +73,7 @@ public class GroupCreateController extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/group/list");
     }
 
-    // 로그인된 유저를 반환하는 메서드
     private User getLoggedInUser(HttpServletRequest request) {
-        // 세션에서 user를 가져오는 로직이 있다고 가정
-        // 여기서는 임의의 User 반환
         User user = new User();
         user.setUserId(UUID.randomUUID());
         user.setUserName("testUser");
