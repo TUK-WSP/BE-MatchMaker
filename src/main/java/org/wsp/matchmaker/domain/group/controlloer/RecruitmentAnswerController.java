@@ -1,23 +1,77 @@
 package org.wsp.matchmaker.domain.recruitment.controller;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.wsp.matchmaker.domain.recruitment.dto.RecruitmentAnswerRequest;
-import org.wsp.matchmaker.domain.recruitment.dto.RecruitmentAnswerResponse;
-import org.wsp.matchmaker.domain.recruitment.service.RecruitmentAnswerService;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-@RestController
-@RequiredArgsConstructor
-public class RecruitmentAnswerController {
+@WebServlet("/recruitment/answer")
+public class RecruitmentAnswerController extends HttpServlet {
 
-    private final RecruitmentAnswerService recruitmentAnswerService;
+    // JSON 파싱
+    private String getParamFromJson(String json, String key) {
+        String search = "\"" + key + "\":\"";
+        int start = json.indexOf(search);
+        if (start == -1) return null;
+        start += search.length();
+        int end = json.indexOf("\"", start);
+        if (end == -1) return null;
+        return json.substring(start, end);
+    }
 
-    @PostMapping("/recruitment/answer")
-    public RecruitmentAnswerResponse getAnswer(@RequestBody RecruitmentAnswerRequest request) {
-        // request: {"answer_id":"..."}
-        // answer_id를 이용해 Service에서 userGroups 조회
-        return recruitmentAnswerService.findByAnswerId(request.getAnswer_id());
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 요청 바디 JSON 읽기
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader br = request.getReader()) {
+            String line;
+            while((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+        }
+        String requestBody = sb.toString();
+        String answerId = getParamFromJson(requestBody, "answer_id");
+
+        // 여기서는 mock 데이터 반환
+        // {
+        //   "userGroups": [
+        //     {
+        //       "userGroupId": "...",
+        //       "group": {
+        //         "groupId": "...",
+        //         "groupName": "...",
+        //         "groupThumbnailImageUrl": "...",
+        //         "groupDescription": "..."
+        //       }
+        //     }
+        //   ]
+        // }
+
+        // mock 데이터
+        String userGroupId = "1001";
+        String groupId = "g-123";
+        String groupName = "Sample Group";
+        String groupThumbnailImageUrl = "https://example.com/img.png";
+        String groupDescription = "This is a sample group description.";
+
+        response.setContentType("application/json; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+
+        out.print("{");
+        out.print("\"userGroups\":[");
+        out.print("{");
+        out.print("\"userGroupId\":\""+userGroupId+"\",");
+        out.print("\"group\":{");
+        out.print("\"groupId\":\""+groupId+"\",");
+        out.print("\"groupName\":\""+groupName+"\",");
+        out.print("\"groupThumbnailImageUrl\":\""+groupThumbnailImageUrl+"\",");
+        out.print("\"groupDescription\":\""+groupDescription+"\"");
+        out.print("}");
+        out.print("}");
+        out.print("]}");
+
+        out.flush();
     }
 }
