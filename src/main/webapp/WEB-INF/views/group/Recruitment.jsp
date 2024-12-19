@@ -1,34 +1,49 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="java.util.UUID" %>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <title>Recruitment 생성</title>
+    <meta charset="UTF-8">
+    <title>모집글 생성</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body>
+<body class="container mt-5">
 
-<h1>모집글 생성</h1>
+<h1 class="mb-4">모집글 생성</h1>
+
 <form id="recruitmentForm">
-    <label for="groupId">Group ID:</label><br>
-    <input type="text" id="groupId" name="groupId" placeholder="그룹 ID(UUID)" value=""><br><br>
+    <div class="mb-3">
+        <label for="groupId" class="form-label">Group ID</label>
+        <input type="text" class="form-control" id="groupId" name="groupId" placeholder="그룹 ID(UUID)">
+    </div>
 
-    <label for="recruitment_title">제목:</label><br>
-    <input type="text" id="recruitment_title" name="recruitment_title" placeholder="모집글 제목"><br><br>
+    <div class="mb-3">
+        <label for="recruitment_title" class="form-label">제목</label>
+        <input type="text" class="form-control" id="recruitment_title" name="recruitment_title" placeholder="모집글 제목">
+    </div>
 
-    <label for="recruitment_description">설명:</label><br>
-    <textarea id="recruitment_description" name="recruitment_description" placeholder="모집글 설명"></textarea><br><br>
+    <div class="mb-3">
+        <label for="recruitment_description" class="form-label">설명</label>
+        <textarea class="form-control" id="recruitment_description" name="recruitment_description" placeholder="모집글 설명"></textarea>
+    </div>
 
-    <label for="recruitment_deadline">마감일(yyyy-MM-dd):</label><br>
-    <input type="text" id="recruitment_deadline" name="recruitment_deadline" placeholder="예: 2024-12-31"><br><br>
+    <div class="mb-3">
+        <label for="recruitment_deadline" class="form-label">마감일(yyyy-MM-dd)</label>
+        <input type="text" class="form-control" id="recruitment_deadline" name="recruitment_deadline" placeholder="예: 2024-12-31">
+    </div>
 
-    <label for="recruitmentNumber">모집인원:</label><br>
-    <input type="number" id="recruitmentNumber" name="recruitmentNumber" placeholder="모집 인원 수"><br><br>
+    <div class="mb-3">
+        <label for="recruitmentNumber" class="form-label">모집인원</label>
+        <input type="number" class="form-control" id="recruitmentNumber" name="recruitmentNumber" placeholder="모집 인원 수">
+    </div>
 
-    <label for="recruitment_status">상태:</label><br>
-    <input type="text" id="recruitment_status" name="recruitment_status" placeholder="예: ACTIVE or INACTIVE"><br><br>
+    <div class="mb-3">
+        <label for="recruitment_status" class="form-label">상태</label>
+        <input type="text" class="form-control" id="recruitment_status" name="recruitment_status" placeholder="예: ACTIVE 또는 INACTIVE">
+    </div>
 
-    <button type="button" id="submitBtn">등록</button>
+    <button type="button" id="submitBtn" class="btn btn-primary">등록</button>
 </form>
 
 <hr>
@@ -48,30 +63,39 @@
             };
 
             $.ajax({
-                url: "${pageContext.request.contextPath}/recruitment",
+                url: "<%=request.getContextPath()%>/group/recruitment",
                 type: "POST",
                 contentType: "application/json; charset=UTF-8",
                 data: JSON.stringify(requestData),
                 dataType: "json",
                 success: function(response) {
-                    // response: { "recruitmentId", "groupId", "title", "description", "deadline", "recruitmentNumber" }
                     $("#result").html(
-                        "<h3>등록 성공!</h3>" +
+                        "<div class='alert alert-success' role='alert'>" +
+                        "<h4 class='alert-heading'>등록 성공!</h4>" +
                         "<p>Recruitment ID: " + response.recruitmentId + "</p>" +
                         "<p>Group ID: " + response.groupId + "</p>" +
                         "<p>제목: " + response.title + "</p>" +
                         "<p>설명: " + response.description + "</p>" +
                         "<p>마감일: " + response.deadline + "</p>" +
-                        "<p>모집인원: " + response.recruitmentNumber + "</p>"
+                        "<p>모집인원: " + response.recruitmentNumber + "</p>" +
+                        "</div>"
                     );
                 },
                 error: function(xhr, status, error) {
-                    $("#result").html("<h3>등록 실패</h3><p>" + xhr.responseText + "</p>");
+                    $("#result").html(
+                        "<div class='alert alert-danger' role='alert'>" +
+                        "<h4 class='alert-heading'>등록 실패</h4>" +
+                        "<p>" + xhr.responseText + "</p>" +
+                        "</div>"
+                    );
                 }
             });
         });
     });
 </script>
+
+<!-- Bootstrap JS (필요하다면) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
