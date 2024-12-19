@@ -13,44 +13,37 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">모집글 생성</h2>
 
-    <form action="/recruitment/create" method="post" enctype="multipart/form-data">
-        <!-- 그룹 ID (Hidden input, 서버에서 설정할 값) -->
-        <input type="hidden" name="groupId" value="${groupId}"/>
+    <form action="RecruitmentController" method="POST">
+        <input type="hidden" name="groupId" value="${groupId}"> <!-- 그룹 ID hidden 필드 -->
 
-        <!-- 모집글 제목 -->
         <div class="mb-3">
-            <label for="recruitment_title" class="form-label">모집글 제목</label>
-            <input type="text" class="form-control" id="recruitment_title" name="recruitment_title" required>
+            <label for="recruitmentTitle" class="form-label">모집 제목</label>
+            <input type="text" class="form-control" id="recruitmentTitle" name="recruitment_title" required>
         </div>
 
-        <!-- 모집글 설명 -->
         <div class="mb-3">
-            <label for="recruitment_description" class="form-label">모집글 설명</label>
-            <textarea class="form-control" id="recruitment_description" name="recruitment_description" rows="3" required></textarea>
+            <label for="description" class="form-label">모집 설명</label>
+            <textarea class="form-control" id="description" name="recruitment_description" rows="4" required></textarea>
         </div>
 
-        <!-- 모집 기한 -->
         <div class="mb-3">
-            <label for="recruitment_deadline" class="form-label">모집 기한</label>
-            <input type="datetime-local" class="form-control" id="recruitment_deadline" name="recruitment_deadline" required>
+            <label for="deadline" class="form-label">모집 마감일</label>
+            <input type="date" class="form-control" id="deadline" name="recruitment_deadline" required>
         </div>
 
-        <!-- 모집 인원 -->
         <div class="mb-3">
-            <label for="recruitmentNumber" class="form-label">모집 인원</label>
-            <input type="number" class="form-control" id="recruitmentNumber" name="recruitmentNumber" required>
+            <label for="number" class="form-label">모집 인원</label>
+            <input type="number" class="form-control" id="number" name="recruitmentNumber" min="1" required>
         </div>
 
-        <!-- 모집 상태 -->
         <div class="mb-3">
-            <label for="recruitment_status" class="form-label">모집 상태</label>
-            <select class="form-select" id="recruitment_status" name="recruitment_status" required>
-                <option value="ACTIVE">활성</option>
-                <option value="INACTIVE">비활성</option>
+            <label for="status" class="form-label">모집 상태</label>
+            <select class="form-select" id="status" name="recruitment_status" required>
+                <option value="OPEN">열림</option>
+                <option value="CLOSED">마감</option>
             </select>
         </div>
 
-        <!-- 제출 버튼 -->
         <button type="submit" class="btn btn-primary">모집글 생성</button>
     </form>
 </div>
