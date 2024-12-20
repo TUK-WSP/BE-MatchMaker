@@ -1,13 +1,11 @@
 package org.wsp.matchmaker.domain.user.dto.request;
 
 import java.util.List;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Value;
-import org.wsp.matchmaker.domain.user.entity.Hobby;
 
 public class UserRequestDTO {
     private UserRequestDTO() {

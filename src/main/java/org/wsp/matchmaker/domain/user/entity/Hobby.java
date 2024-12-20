@@ -34,4 +34,7 @@
 
         @OneToMany(mappedBy = "hobby", cascade = CascadeType.ALL, orphanRemoval = true)
         private Set<UserHobby> userHobbies = new HashSet<>();
+
+        public Hobby(String test) {
+        }
     }

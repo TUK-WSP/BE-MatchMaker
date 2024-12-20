@@ -1,5 +1,6 @@
 package org.wsp.matchmaker;
 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -16,8 +17,5 @@ public class HomeController {
         return "login"; // /WEB-INF/views/login.jsp를 찾습니다.
     }
 
-    @GetMapping("/mypage")
-    public String mypage() {
-        return "mypage/mypage";
-    }
+
 }
