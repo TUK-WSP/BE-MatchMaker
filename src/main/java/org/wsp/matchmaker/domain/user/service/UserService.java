@@ -133,6 +133,7 @@ public class UserService {
     }
 
     // 모집 신청 취소하기
+    @Transactional
     public void cancelRecruitmentApplication(Long applicationId) {
         RecruitmentApplication application = recruitmentApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("신청을 찾을 수 없습니다."));
@@ -143,7 +144,4 @@ public class UserService {
         // 상태 업데이트 후 저장
         recruitmentApplicationRepository.save(application);
     }
-
-
-
 }
