@@ -1,45 +1,65 @@
 package org.wsp.matchmaker.domain.subgroup.entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.UuidGenerator;
+import jakarta.persistence.*;
+import lombok.*;
 import org.wsp.matchmaker.domain.group.entity.Group;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "subgroup")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class SubGroup {
+
     @Id
-    @UuidGenerator
-    @Column(name = "subgroup_id", nullable = false)
+    @GeneratedValue(generator = "UUID")
+    @org.hibernate.annotations.GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "subgroup_id", nullable = false, updatable = false)
     private UUID subGroupId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id", nullable = true)
+    private Group group;
 
     @Column(name = "subgroup_name", nullable = false)
     private String name; // 소모임 이름
 
-    @OneToMany(mappedBy = "subgroup", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ArrayList<UserSubGroup> userSubGroups = new ArrayList<>();
+    @Column(length = 1000)
+    private String description; // 소모임 설명
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id", nullable = false) // 외래 키 설정
-    private Group group; // Group 필드 정의
+    @Column(nullable = false)
+    private String status; // 상태
 
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt; // 생성일시
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt; // 수정일시
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @OneToMany(mappedBy = "subGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserSubGroup> userSubGroups = new ArrayList<>(); // 소모임 멤버 목록
+
+    @OneToMany(mappedBy = "subGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SubActivity> activities = new ArrayList<>(); // 활동 목록
 }
