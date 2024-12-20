@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,23 +36,6 @@ public class MypageController {
         return "mypage/mypage"; // 내 정보 페이지로 이동
     }
 
-    //나의 모집글 신청 목록 페이지
-    @GetMapping("/mypage/application")
-    public String getApplication(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
-        model.addAttribute("user", user);
-        return "mypage/application"; // 나의 모집신청 페이지로 이동
-    }
-
-    //나의 모임 페이지 이동
-    @GetMapping("/mypage/group")
-    public String getGroup(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
-        List<Group> userGroups = userService.getUserGroups(user.getUserId());
-        model.addAttribute("userGroups", userGroups); // 모임 정보 모델에 추가
-        return "mypage/group"; // 나의 모임 페이지로 이동
-    }
-
     //회원 정보 수정 페이지
     @GetMapping("/mypage/update")
     public String updateUserInfo(HttpSession session, Model model) {
@@ -59,8 +43,8 @@ public class MypageController {
         model.addAttribute("user", user);
         return "mypage/update"; // 내 정보 수정 페이지로 이동
     }
-    
-    //회원 정보 수정
+
+    //회원정보 수정
     @PutMapping("/mypage/update")
     public ApiResponse<Void> updateUserInfo(
             @RequestParam UUID userId,

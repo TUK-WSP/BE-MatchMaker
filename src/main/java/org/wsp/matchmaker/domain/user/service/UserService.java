@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.wsp.matchmaker.domain.group.entity.Group;
 import org.wsp.matchmaker.domain.group.entity.UserGroup;
 import org.wsp.matchmaker.domain.group.repository.UserGroupRepository;
+import org.wsp.matchmaker.domain.recruitment.entity.RecruitmentApplication;
+import org.wsp.matchmaker.domain.recruitment.entity.repository.RecruitmentApplicationRepository;
 import org.wsp.matchmaker.domain.user.dto.request.UserRequestDTO.HobbyDTO;
 import org.wsp.matchmaker.domain.user.dto.request.UserRequestDTO.UserRegisterInfoRequestDTO;
 import org.wsp.matchmaker.domain.user.entity.Hobby;
@@ -20,6 +22,7 @@ import org.wsp.matchmaker.domain.user.entity.UserHobby;
 import org.wsp.matchmaker.domain.user.repository.HobbyRepository;
 import org.wsp.matchmaker.domain.user.repository.UserRepository;
 import org.wsp.matchmaker.global.commonEntity.enums.Gender;
+import org.wsp.matchmaker.global.commonEntity.enums.Status;
 
 @Slf4j
 @Service
@@ -29,6 +32,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final HobbyRepository hobbyRepository;
     private final UserGroupRepository userGroupRepository;
+    private final RecruitmentApplicationRepository recruitmentApplicationRepository;
 
 
     @Transactional
@@ -115,11 +119,31 @@ public class UserService {
                         .build()));
     }
 
+    //회원의 모임 목록 가져오기
     public List<Group> getUserGroups(UUID userId) {
         List<UserGroup> userGroups = userGroupRepository.findByUser_UserId(userId);
         return userGroups.stream()
                 .map(UserGroup::getGroup) // UserGroup에서 Group을 가져옴
                 .collect(Collectors.toList());
     }
+
+    // 사용자의 모집 신청 목록 가져오기
+    public List<RecruitmentApplication> getUserApplications(UUID userId) {
+        return recruitmentApplicationRepository.findByUser_UserId(userId);
+    }
+
+    // 모집 신청 취소하기
+    public void cancelRecruitmentApplication(Long applicationId) {
+        RecruitmentApplication application = recruitmentApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new IllegalArgumentException("신청을 찾을 수 없습니다."));
+
+        // 신청 상태를 '삭제됨'으로 변경
+        application.setApplicationStatus(Status.DELETED);
+
+        // 상태 업데이트 후 저장
+        recruitmentApplicationRepository.save(application);
+    }
+
+
 
 }
