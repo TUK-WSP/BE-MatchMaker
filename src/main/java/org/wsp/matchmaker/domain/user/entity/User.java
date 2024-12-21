@@ -35,12 +35,14 @@ public class User extends AuditEntity {
     private UUID userId;
 
     private String userName;
+    private String userEmail;
     private String password;
     private Gender gender;
 
     @OneToMany(mappedBy ="user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserBadge> userBadges = new HashSet<>();
 
+    @Builder.Default
     @OneToMany(mappedBy ="user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserHobby> userHobbies = new HashSet<>();
 
