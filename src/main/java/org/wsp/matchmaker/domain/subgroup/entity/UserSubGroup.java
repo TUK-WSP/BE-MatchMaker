@@ -1,37 +1,34 @@
 package org.wsp.matchmaker.domain.subgroup.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.UuidGenerator;
+import jakarta.persistence.*;
+import lombok.*;
 import org.wsp.matchmaker.domain.user.entity.User;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_subgroup")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class UserSubGroup {
+
+
     @Id
-    @UuidGenerator
-    private UUID subGroupId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false, updatable = false)
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User user; // User 엔티티 참조
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subgroup_id", nullable = false)
-    private SubGroup subgroup;
+    private SubGroup subGroup;
+
+    @Column(name = "joined_date", nullable = false)
+    private LocalDateTime joinedDate;
 }
