@@ -19,9 +19,9 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="/">홈</a></li>
-                <li class="nav-item"><a class="nav-link active" href="/subgroup">내 소모임</a></li>
-                <li class="nav-item"><a class="nav-link" href="/notice">공지사항</a></li>
-                <li class="nav-item"><a class="nav-link" href="/profile">프로필 설정</a></li>
+                <li class="nav-item"><a class="nav-link" href="/">모임</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/subgroup">소모임</a></li>
+                <li class="nav-item"><a class="nav-link" href="/profile">마이 페이지</a></li>
             </ul>
         </div>
     </div>
