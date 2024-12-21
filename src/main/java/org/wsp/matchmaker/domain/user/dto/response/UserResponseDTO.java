@@ -17,4 +17,13 @@ public class UserResponseDTO {
         private String userEmail;
         private Integer hobbyCount;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserReportResponseDTO {
+        private UUID userId;
+        private UUID targetId;
+    }
 }
