@@ -63,7 +63,7 @@
                 <div class="card-body">
                     <h5 class="card-title">활동 기록 보기</h5>
                     <p class="card-text">소모임의 활동 기록을 확인하고 공유하세요.</p>
-                    <a href="/subgroup/sgActivity" class="btn btn-success">활동 기록</a>
+                    <a href="/subgroup/sgactivity" class="btn btn-success">활동 기록</a> <!-- 활동 기록 보기 버튼 -->
                 </div>
             </div>
         </div>

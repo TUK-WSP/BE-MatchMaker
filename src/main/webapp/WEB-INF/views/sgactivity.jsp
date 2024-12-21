@@ -27,7 +27,9 @@
 
 <div class="container mt-5">
     <h1 class="mb-4">소모임 활동 기록</h1>
-    <div class="list-group">
+
+    <!-- 활동 기록 목록 -->
+    <div class="list-group mb-5">
         <c:forEach var="activity" items="${activities}">
             <div class="list-group-item">
                 <h5>${activity.title}</h5>
@@ -36,6 +38,20 @@
             </div>
         </c:forEach>
     </div>
+
+    <!-- 활동 기록 추가 폼 -->
+    <h3 class="mb-4">새 활동 기록 추가</h3>
+    <form action="/subgroup/activity/sgactivity/${subgroupId}" method="POST">
+        <div class="mb-3">
+            <label for="title" class="form-label">활동 제목</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+        <div class="mb-3">
+            <label for="content" class="form-label">활동 내용</label>
+            <textarea class="form-control" id="content" name="content" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">활동 기록 추가</button>
+    </form>
 </div>
 
 <footer class="bg-light text-center py-3 mt-5">

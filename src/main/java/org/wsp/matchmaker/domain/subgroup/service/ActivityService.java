@@ -21,6 +21,7 @@ public class ActivityService {
 
     // 활동 기록 조회
     public List<ActivityDetailResponse> getActivities(UUID subgroupId) {
+        // 해당 소모임의 활동 기록 조회
         return subActivityRepository.findBySubGroup_SubGroupId(subgroupId).stream()
                 .map(activity -> ActivityDetailResponse.builder()
                         .activityId(activity.getActivityId())
@@ -28,7 +29,7 @@ public class ActivityService {
                         .content(activity.getContent())
                         .createdAt(activity.getCreatedAt())
                         .build())
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); // 반환되는 활동 기록 리스트
     }
 
     // 활동 기록 추가

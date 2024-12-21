@@ -16,25 +16,25 @@ public class SubActivityController {
 
     private final ActivityService activityService;
 
-    // 활동 기록 목록 조회
-    @GetMapping("/sgactivity/{subgroupId}")
+    // 활동 기록 목록 조회 (소모임 ID 포함)
+    @GetMapping("/{subgroupId}/activities")
     public String getActivities(@PathVariable UUID subgroupId, Model model) {
         model.addAttribute("activities", activityService.getActivities(subgroupId));
         model.addAttribute("subgroupId", subgroupId);
-        return "activityList"; // activityList.jsp
+        return "sgactivity";  // sgactivity.jsp 페이지로 이동
     }
 
     // 활동 기록 추가 화면
-    @GetMapping("/create/{subgroupId}")
+    @GetMapping("/{subgroupId}/activities/create")
     public String showAddActivityForm(@PathVariable UUID subgroupId, Model model) {
         model.addAttribute("subgroupId", subgroupId);
-        return "activityCreate"; // activityCreate.jsp
+        return "subactivityCreate";  // subactivityCreate.jsp 페이지로 이동
     }
 
     // 활동 기록 추가 처리
-    @PostMapping("/sgactivity/{subgroupId}")
+    @PostMapping("/{subgroupId}/activities")
     public String addActivity(@PathVariable UUID subgroupId, @ModelAttribute ActivityRequest activityRequest) {
         activityService.addActivity(subgroupId, activityRequest);
-        return "redirect:/subgroup/activity/sgactivity/" + subgroupId; // 활동 목록 페이지로 리다이렉트
+        return "redirect:/subgroup/activity/" + subgroupId + "/activities";  // 활동 목록 페이지로 리다이렉트
     }
 }

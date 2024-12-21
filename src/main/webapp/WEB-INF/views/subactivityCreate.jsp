@@ -1,21 +1,29 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: june
-  Date: 24. 12. 20.
-  Time: 오후 6:22
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<h2>활동 기록 추가</h2>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>활동 기록 추가</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>활동 기록 추가</h1>
 
-<form action="/subgroup/activity/sgactivity/${subgroupId}" method="POST">
-    <input type="hidden" name="subGroupId" value="${subgroupId}" />
+    <form action="/subgroup/activity/sgactivity" method="post">
+        <div class="mb-3">
+            <label for="title" class="form-label">활동 제목</label>
+            <input type="text" id="title" name="title" class="form-control" required>
+        </div>
 
-    <label for="title">활동 제목:</label>
-    <input type="text" id="title" name="title" required /><br>
+        <div class="mb-3">
+            <label for="content" class="form-label">활동 내용</label>
+            <textarea id="content" name="content" class="form-control" rows="4" required></textarea>
+        </div>
 
-    <label for="content">활동 내용:</label>
-    <textarea id="content" name="content" required></textarea><br>
-
-    <button type="submit" class="btn btn-success">활동 기록 생성</button>
-</form>
+        <button type="submit" class="btn btn-primary">활동 기록 추가</button>
+    </form>
+</div>
+</body>
+</html>
