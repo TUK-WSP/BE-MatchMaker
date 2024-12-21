@@ -1,4 +1,4 @@
-package org.wsp.matchmaker.domain.admin.entity;
+package org.wsp.matchmaker.domain.user.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,9 +15,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
+import org.wsp.matchmaker.domain.admin.entity.AdminReport;
 import org.wsp.matchmaker.domain.admin.entity.enums.ReportStatus;
 import org.wsp.matchmaker.domain.admin.entity.enums.ReportType;
-import org.wsp.matchmaker.domain.user.entity.User;
 import org.wsp.matchmaker.global.commonEntity.AuditEntity;
 
 @Entity

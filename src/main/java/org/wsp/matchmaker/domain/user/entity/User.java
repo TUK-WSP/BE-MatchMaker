@@ -8,6 +8,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,6 @@ import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 import org.wsp.matchmaker.domain.notification.entity.Notification;
 import org.wsp.matchmaker.domain.recruitment.entity.RecruitmentApplication;
-import org.wsp.matchmaker.global.commonEntity.AuditEntity;
 import org.wsp.matchmaker.global.commonEntity.enums.Gender;
 
 @Entity
@@ -28,7 +28,7 @@ import org.wsp.matchmaker.global.commonEntity.enums.Gender;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User extends AuditEntity {
+public class User {
     @Id
     @UuidGenerator
     @Column(name = "user_id", updatable = false, nullable = false)
@@ -39,6 +39,7 @@ public class User extends AuditEntity {
     private String password;
     private Gender gender;
 
+
     @OneToMany(mappedBy ="user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserBadge> userBadges = new HashSet<>();
 
@@ -47,9 +48,22 @@ public class User extends AuditEntity {
     private Set<UserHobby> userHobbies = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ArrayList<RecruitmentApplication> recruitmentApplications = new ArrayList<>();
+    private List<RecruitmentApplication> recruitmentApplications = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ArrayList<Notification> notifications = new ArrayList<>();
+    private List<Notification> notifications = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Report> reports = new ArrayList<>();
+
+
+    public void addReport(Report report) {
+        reports.add(report);
+        report.setUser(this);
+    }
+
+    public void removeReport(Report report) {
+        reports.remove(report);
+        report.setUser(null);
+    }
 }
